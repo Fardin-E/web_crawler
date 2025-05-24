@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	// "golang.org/x/net/html" // Not needed if goquery is being used
 )
 
 type Product struct {
@@ -32,32 +31,16 @@ func fetchPage(urlStr string) (*http.Response, error) {
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch URL %s: %w", urlStr, err)
+		return nil, fmt.Errorf("failed to fetch URL %s: %w", urlStr, err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
 		resp.Body.Close() // Crucial: close body if returning nil error
-		return nil, fmt.Errorf("Received non-Ok status code for %s: %d %s", urlStr, resp.StatusCode, resp.Status)
+		return nil, fmt.Errorf("received non-Ok status code for %s: %d %s", urlStr, resp.StatusCode, resp.Status)
 	}
 
 	return resp, nil
 }
-
-// getTextContent (kept for reference)
-// func getTextContent(n *html.Node) string {
-// 	if n == nil {
-// 		return ""
-// 	}
-// 	var buf strings.Builder
-// 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-// 		if c.Type == html.TextNode {
-// 			buf.WriteString(c.Data)
-// 		} else if c.Type == html.ElementNode {
-// 			buf.WriteString(getTextContent(c))
-// 		}
-// 	}
-// 	return strings.TrimSpace(buf.String())
-// }
 
 func main() {
 	targetUrl := "https://www.scrapingcourse.com/ecommerce/"
