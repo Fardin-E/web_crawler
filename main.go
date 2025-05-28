@@ -1,63 +1,49 @@
 package main
 
 import (
-	"bytes"
-	"encoding/hex"
-	"fmt"
-	"io"
+	"net/url"
+	"time"
 
-	"github.com/Fardin-E/web_crawler.git/fetcher"
-	"github.com/Fardin-E/web_crawler.git/parser"
+	"github.com/Fardin-E/web_crawler.git/crawler"
+	"github.com/Fardin-E/web_crawler.git/storage"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	url := "https://www.scrapingcourse.com/ecommerce/"
+	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
+	initialUrls := []url.URL{}
 
-	fetcher := &fetcher.Fetcher{}
+	myUrl, _ := url.Parse("https://www.scrapingcourse.com/ecommerce/")
+	initialUrls = append(initialUrls, *myUrl)
 
-	fmt.Printf("Fetching HTML from: %s", url)
-	resp, err := fetcher.FetchPage(url)
+	contentStorage, err := storage.NewFileStorage("./data")
 	if err != nil {
-		fmt.Printf("Error fetching url %s\n", url)
-		return
-	}
-	defer resp.Body.Close()
-
-	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Printf("Error reading response body %v\n", err)
-		return
+		panic(err)
 	}
 
-	// --- START BOM STRIPPING AND RAW BYTE INSPECTION ---
-	fmt.Printf("DEBUG: Fetched body length (raw): %d bytes\n", len(bodyBytes))
-	if len(bodyBytes) > 10 {
-		fmt.Printf("DEBUG: First 10 raw bytes (hex): %s\n", hex.EncodeToString(bodyBytes[:10]))
-	} else {
-		fmt.Printf("DEBUG: Raw bytes (hex): %s\n", hex.EncodeToString(bodyBytes))
-	}
+	// contentParsers := []parser.Parser{}
+	// contentParsers = append(contentParsers, &parser.HtmlParser{})
 
-	// Check for UTF-8 BOM (EF BB BF) and strip it if present
-	if len(bodyBytes) >= 3 && bytes.Equal(bodyBytes[0:3], []byte{0xEF, 0xBB, 0xBF}) {
-		fmt.Println("DEBUG: UTF-8 BOM detected and stripped.")
-		bodyBytes = bodyBytes[3:]
-	}
-	// --- END BOM STRIPPING AND RAW BYTE INSPECTION ---
+	crawler := crawler.NewCrawler(initialUrls, contentStorage, &crawler.Config{
+		MaxRedirects:    5,
+		RevisitDelay:    time.Hour * 2,
+		WorkerCount:     10,
+		ExcludePatterns: []string{},
+	})
 
-	htmlContent := string(bodyBytes) // Convert bytes to string AFTER BOM stripping
+	// adding custom parser to the crawler
 
-	parser := &parser.HtmlParser{}
-	parsedTokens, err := parser.Parse(htmlContent)
-	if err != nil {
-		fmt.Printf("Error parsing HTML: %v\n", err)
-		return
-	}
+	// Adding custom processor to the crawler
+	crawler.AddProcessor(&LoggerProcessor{})
 
-	fmt.Println("\nExtracted Tokens:")
-	if len(parsedTokens) == 0 {
-		fmt.Println("  No tokens extracted.")
-	}
-	for _, t := range parsedTokens {
-		fmt.Printf("  Name: %-8s Value: %s\n", t.Name, t.Value)
-	}
+	crawler.Start()
+}
+
+// Example of custom processor
+type LoggerProcessor struct {
+}
+
+func (l *LoggerProcessor) Process(result crawler.CrawlResult) error {
+	log.Print("Processing result")
+	return nil
 }

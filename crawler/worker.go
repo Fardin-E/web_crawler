@@ -28,25 +28,19 @@ type Worker struct {
 	history map[string]time.Time
 }
 
-func NewWorker(input chan *url.URL,
-	deadLetter chan *url.URL,
-	result chan CrawlResult,
-	done chan struct{},
-	id int,
-) *Worker {
+func NewWorker(input chan *url.URL, result chan CrawlResult, done chan struct{}, id int, deadLetter chan *url.URL) *Worker {
 	history := make(map[string]time.Time)
 	logger := log.WithField("worker", id)
 	return &Worker{
 		input:      input,
-		deadLetter: deadLetter,
 		result:     result,
 		done:       done,
 		id:         id,
 		history:    history,
+		deadLetter: deadLetter,
 		logger:     logger,
 	}
 }
-
 func (w *Worker) Start() {
 	w.logger.Debugf("Worker %d started", w.id)
 	for {
