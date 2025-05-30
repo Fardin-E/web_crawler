@@ -22,7 +22,7 @@ func (e *LinkExtractor) Process(result CrawlResult) error {
 		}
 		parsedUrls, err := parser.Parse(string(result.Body))
 		if err != nil {
-			return fmt.Errorf("Error parsing content: %s", err)
+			return fmt.Errorf("error parsing content: %s", err)
 		}
 		log.Infof("Extracted %d urls", len(parsedUrls))
 		for _, parsedUrl := range parsedUrls {
