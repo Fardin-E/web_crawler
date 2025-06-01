@@ -24,8 +24,8 @@ func (e *LinkExtractor) Process(result CrawlResult) error {
 		if err != nil {
 			return fmt.Errorf("error parsing content: %s", err)
 		}
-		log.Infof("Extracted %d urls", len(parsedUrls))
-		for _, parsedUrl := range parsedUrls {
+		log.Infof("Extracted %d urls", len(parsedUrls.Links))
+		for _, parsedUrl := range parsedUrls.Links {
 			newUrl, err := url.Parse(parsedUrl.Value)
 			if err != nil {
 				log.Debugf("Error parsing url: %s", err)

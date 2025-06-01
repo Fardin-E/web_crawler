@@ -6,7 +6,14 @@ type Token struct {
 	Value string
 }
 
+type Info struct {
+	Title       string
+	Description string
+	Paragraphs  []string
+	Links       []Token
+}
+
 type Parser interface {
 	IsSupportedExtension(extension string) bool
-	Parse(content string) ([]Token, error)
+	Parse(content string) (Info, error)
 }
