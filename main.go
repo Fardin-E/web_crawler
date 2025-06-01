@@ -45,7 +45,7 @@ func main() {
 type LoggerProcessor struct {
 }
 
-func (l *LoggerProcessor) Process(result crawler.CrawlResult) error {
+func (l *LoggerProcessor) Process(result *crawler.CrawlResult) error {
 	log.Print("Processing result")
 	return nil
 }

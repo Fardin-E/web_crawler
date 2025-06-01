@@ -1,5 +1,5 @@
 package crawler
 
 type Processor interface {
-	Process(CrawlResult) error
+	Process(*CrawlResult) error
 }

@@ -38,12 +38,12 @@ func (c *Crawler) Start() {
 	workersResults := make([]chan CrawlResult, c.config.WorkerCount)
 	done := make(chan struct{})
 
-	for i := 0; i < c.config.WorkerCount; i++ {
+	for i := range c.config.WorkerCount {
 		distributedInputs[i] = make(chan *url.URL)
 		workersResults[i] = make(chan CrawlResult)
 	}
 	go distributeUrls(c.frontier, distributedInputs)
-	for i := 0; i < c.config.WorkerCount; i++ {
+	for i := range c.config.WorkerCount {
 		worker := NewWorker(distributedInputs[i], workersResults[i], done, i, c.deadLetter)
 		go worker.Start()
 	}
@@ -51,7 +51,7 @@ func (c *Crawler) Start() {
 	mergedResults := make(chan CrawlResult)
 	go mergeResults(workersResults, mergedResults)
 	newUrls := make(chan *url.URL)
-	c.AddProcessor(&LinkExtractor{Parsers: c.contentParsers, NewUrls: newUrls})
+	c.AddProcessor(&LinkExtractor{NewUrls: newUrls})
 	c.AddProcessor(&SaveToFile{storageBackend: c.storage})
 	go func() {
 		for newUrl := range newUrls {
@@ -66,13 +66,25 @@ func (c *Crawler) Start() {
 	}()
 
 	for result := range mergedResults {
-		for _, processor := range c.processors {
-			go func(processor Processor, result CrawlResult) {
-				processErr := processor.Process(result)
-				if processErr != nil {
-					log.Error(processErr)
+		// Parse once BEFORE passing to processors
+		for _, parser := range c.contentParsers {
+			if parser.IsSupportedExtension(result.ContentType) {
+				parsedInfo, err := parser.Parse(string(result.Body))
+				if err != nil {
+					log.Warnf("Failed to parse: %v", err)
+				} else {
+					result.Info = &parsedInfo
 				}
-			}(processor, result)
+				break // Use only the first matching parser
+			}
+		}
+
+		for _, processor := range c.processors {
+			go func(processor Processor, result *CrawlResult) {
+				if err := processor.Process(result); err != nil {
+					log.Error(err)
+				}
+			}(processor, &result)
 		}
 	}
 	log.Println("Crawler exited")

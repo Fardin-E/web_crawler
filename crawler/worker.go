@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/Fardin-E/web_crawler.git/parser"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -14,6 +15,7 @@ type CrawlResult struct {
 	Url         *url.URL
 	ContentType string
 	Body        []byte
+	Info        *parser.Info
 }
 
 type Worker struct {
