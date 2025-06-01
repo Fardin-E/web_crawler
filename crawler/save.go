@@ -13,33 +13,12 @@ type SaveToFile struct {
 	storageBackend storage.Storage
 }
 
-var imageExtensions = map[string]string{
-	"image/jpeg":    ".jpg",
-	"image/png":     ".png",
-	"image/gif":     ".gif",
-	"image/webp":    ".webp",
-	"image/svg+xml": ".svg",
-	// ... etc
-}
-
-func getImageExtension(contentType string) string {
-	if ext, ok := imageExtensions[contentType]; ok {
-		return ext
-	}
-	return ".bin"
-}
-
 func (s *SaveToFile) Process(result CrawlResult) error {
 	savePath := getSavePath(result.Url)
 
 	switch {
 	case strings.HasPrefix(result.ContentType, "text/html"):
 		savePath := savePath + ".html"
-		return s.storageBackend.Set(savePath, string(result.Body))
-
-	case strings.HasPrefix(result.ContentType, "image/"):
-		ext := getImageExtension(result.ContentType)
-		savePath := savePath + ext
 		return s.storageBackend.Set(savePath, string(result.Body))
 
 	default:
