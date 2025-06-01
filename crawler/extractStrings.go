@@ -1,3 +1,6 @@
+// IS NOT BEING USED
+// POINTLESS FOR NOW
+
 package crawler
 
 import (

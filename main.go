@@ -13,7 +13,7 @@ func main() {
 	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
 	initialUrls := []url.URL{}
 
-	myUrl, _ := url.Parse("https://www.scrapingcourse.com/ecommerce/")
+	myUrl, _ := url.Parse("https://www.bbc.com/news/articles/cql2990k4dno")
 	initialUrls = append(initialUrls, *myUrl)
 
 	contentStorage, err := storage.NewFileStorage("./data")
@@ -24,11 +24,13 @@ func main() {
 	// contentParsers := []parser.Parser{}
 	// contentParsers = append(contentParsers, &parser.HtmlParser{})
 
+	skipPatterns := []string{"/login", "/search", "/cart", "/checkout"}
+
 	crawler := crawler.NewCrawler(initialUrls, contentStorage, &crawler.Config{
 		MaxRedirects:    5,
 		RevisitDelay:    time.Hour * 2,
 		WorkerCount:     10,
-		ExcludePatterns: []string{},
+		ExcludePatterns: skipPatterns,
 	})
 
 	// adding custom parser to the crawler
