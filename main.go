@@ -26,6 +26,7 @@ func main() {
 
 	skipPatterns := []string{"/login", "/search", "/cart", "/checkout"}
 
+
 	crawler := crawler.NewCrawler(initialUrls, contentStorage, &crawler.Config{
 		MaxRedirects:    5,
 		RevisitDelay:    time.Hour * 2,
@@ -48,4 +49,5 @@ type LoggerProcessor struct {
 func (l *LoggerProcessor) Process(result *crawler.CrawlResult) error {
 	log.Print("Processing result")
 	return nil
+
 }
