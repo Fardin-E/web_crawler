@@ -34,6 +34,11 @@ func NewCrawler(initialUrls []url.URL,
 }
 
 func (c *Crawler) Start() {
+	conn := &storage.ConnDB{}
+	err := conn.ConnectDB()
+	if err != nil {
+		log.Fatal(err)
+	}
 	distributedInputs := make([]chan *url.URL, c.config.WorkerCount)
 	workersResults := make([]chan CrawlResult, c.config.WorkerCount)
 	done := make(chan struct{})
@@ -53,6 +58,7 @@ func (c *Crawler) Start() {
 	newUrls := make(chan *url.URL)
 	c.AddProcessor(&LinkExtractor{NewUrls: newUrls})
 	c.AddProcessor(&SaveToFile{storageBackend: c.storage})
+	c.AddProcessor(&SaveToDB{dbstorage: *conn})
 	go func() {
 		for newUrl := range newUrls {
 			_ = c.frontier.Add(newUrl)

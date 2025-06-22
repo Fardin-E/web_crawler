@@ -24,8 +24,7 @@ func main() {
 	// contentParsers := []parser.Parser{}
 	// contentParsers = append(contentParsers, &parser.HtmlParser{})
 
-	skipPatterns := []string{"/login", "/search", "/cart", "/checkout"}
-
+	skipPatterns := []string{"/login*", "/search*", "/cart*", "/checkout*", "/account*"}
 
 	crawler := crawler.NewCrawler(initialUrls, contentStorage, &crawler.Config{
 		MaxRedirects:    5,
