@@ -2,15 +2,15 @@ package parser
 
 // this is where the links are being stored
 type Token struct {
-	Name  string
-	Value string
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type Info struct {
-	Title       string
-	Description string
-	Paragraphs  []string
-	Links       []Token
+	Title       string   `json:"title"`
+	Description string   `json:"description"`
+	Paragraphs  []string `json:"paragraphs"`
+	Links       []Token  `json:"links"`
 }
 
 type Parser interface {

@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -16,7 +17,12 @@ func (s *SaveToDB) Process(result *CrawlResult) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
-	err := s.dbstorage.InsertPage(ctx, result.Url.String(), result.ContentType, string(result.Body))
+	jsonData, err := json.Marshal(result.Info)
+	if err != nil {
+		return fmt.Errorf("failed to marshal Info to JSON: %w", err)
+	}
+
+	err = s.dbstorage.InsertPage(ctx, result.Url.String(), result.ContentType, jsonData)
 	if err != nil {
 		return fmt.Errorf("failed to insert page: %w", err)
 	}
