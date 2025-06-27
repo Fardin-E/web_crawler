@@ -2,12 +2,12 @@ package storage
 
 /*
 
-CREATE TABLE crawled_pages (
+CREATE TABLE crawler_schema.pages (
     id SERIAL PRIMARY KEY,
     url TEXT UNIQUE NOT NULL,                   -- Page URL
     status_code SMALLINT,                       -- HTTP status code (e.g., 200, 404)
     content_type TEXT,                          -- e.g., "text/html", "application/json"
-    html_content TEXT,                          -- Full HTML of the page
+    html_content JSONB,                          -- Full HTML of the page
     title TEXT,                                 -- Page <title>
     meta_description TEXT,                      -- From <meta name="description">
     content_length INTEGER,                     -- Length of the body content
@@ -35,7 +35,7 @@ func (c *ConnDB) ConnectDB() error {
 	dsn := url.URL{
 		Scheme: "postgres",
 		Host:   "localhost:5432",
-		User:   url.UserPassword("postgres", "secret"),
+		User:   url.UserPassword("freid", "password"),
 		Path:   "/crawler",
 	}
 
@@ -58,7 +58,7 @@ func (c *ConnDB) CloseDB() {
 }
 
 func (c *ConnDB) InsertPage(ctx context.Context, url string, content_type string, body []byte) error {
-	sql := `INSERT INTO crawled_pages (url, content_type, html_content) VALUES ($1, $2, $3)`
+	sql := `INSERT INTO crawler_schema.pages (url, content_type, html_content) VALUES ($1, $2, $3)`
 	_, err := c.db.Exec(ctx, sql, url, content_type, body)
 	return err
 }

@@ -102,5 +102,6 @@ func (w *Worker) fetch(url *url.URL) (CrawlResult, error) {
 		Url:         url,
 		ContentType: inferredContentType,
 		Body:        body,
+		Info:        &parser.Info{StatusCode: res.StatusCode},
 	}, nil
 }
