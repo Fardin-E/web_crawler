@@ -57,8 +57,8 @@ func (c *ConnDB) CloseDB() {
 	}
 }
 
-func (c *ConnDB) InsertPage(ctx context.Context, url string, content_type string, body []byte) error {
-	sql := `INSERT INTO crawler_schema.pages (url, content_type, html_content) VALUES ($1, $2, $3)`
-	_, err := c.db.Exec(ctx, sql, url, content_type, body)
+func (c *ConnDB) InsertPage(ctx context.Context, url string, status_code int, content_type string, body []byte) error {
+	sql := `INSERT INTO crawler_schema.pages (url, status_code, content_type, html_content) VALUES ($1, $2, $3, $4)`
+	_, err := c.db.Exec(ctx, sql, url, status_code, content_type, body)
 	return err
 }

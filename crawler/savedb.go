@@ -22,7 +22,7 @@ func (s *SaveToDB) Process(result *CrawlResult) error {
 		return fmt.Errorf("failed to marshal Info to JSON: %w", err)
 	}
 
-	err = s.dbstorage.InsertPage(ctx, result.Url.String(), result.ContentType, jsonData)
+	err = s.dbstorage.InsertPage(ctx, result.Url.String(), result.Info.StatusCode, result.ContentType, jsonData)
 	if err != nil {
 		return fmt.Errorf("failed to insert page: %w", err)
 	}

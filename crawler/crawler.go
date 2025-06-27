@@ -72,25 +72,39 @@ func (c *Crawler) Start() {
 	}()
 
 	for result := range mergedResults {
+		copyResult := result
+
+		// Get the status code from the original info struct fetched
+		originalStatusCode := 0
+		if copyResult.Info != nil {
+			originalStatusCode = copyResult.Info.StatusCode
+		}
 		// Parse once BEFORE passing to processors
-		for _, parser := range c.contentParsers {
-			if parser.IsSupportedExtension(result.ContentType) {
-				parsedInfo, err := parser.Parse(string(result.Body))
+		for _, p := range c.contentParsers {
+			if p.IsSupportedExtension(copyResult.ContentType) {
+				parsedInfo, err := p.Parse(string(copyResult.Body))
 				if err != nil {
 					log.Warnf("Failed to parse: %v", err)
+					if copyResult.Info == nil {
+						copyResult.Info = &parser.Info{StatusCode: originalStatusCode}
+					} else {
+						copyResult.Info.StatusCode = originalStatusCode
+					}
 				} else {
-					result.Info = &parsedInfo
+					// 3. Assign the new parsed Info struct
+					copyResult.Info = &parsedInfo
+					copyResult.Info.StatusCode = originalStatusCode
 				}
 				break // Use only the first matching parser
 			}
 		}
 
 		for _, processor := range c.processors {
-			go func(processor Processor, result *CrawlResult) {
-				if err := processor.Process(result); err != nil {
+			go func(processor Processor, r *CrawlResult) {
+				if err := processor.Process(r); err != nil {
 					log.Error(err)
 				}
-			}(processor, &result)
+			}(processor, &copyResult)
 		}
 	}
 	log.Println("Crawler exited")
