@@ -12,10 +12,13 @@ import (
 )
 
 type CrawlResult struct {
-	Url         *url.URL
-	ContentType string
-	Body        []byte
-	Info        *parser.Info
+	Url          *url.URL
+	StatusCode   int
+	ContentType  string
+	ResponseTime time.Duration
+	Body         []byte
+	Info         *parser.Info
+	IsError      bool
 }
 
 type Worker struct {
@@ -76,32 +79,42 @@ func (w *Worker) fetch(url *url.URL) (CrawlResult, error) {
 	for !w.CheckPoliteness(url) {
 		time.Sleep(2 * time.Second)
 	}
+
+	// Measure response time
+	start := time.Now()
 	res, err := http.Get(url.String())
 	if err != nil {
-		return CrawlResult{}, err
+		return CrawlResult{Url: url, IsError: true}, err
 	}
 	defer res.Body.Close()
+	responseTime := time.Since(start)
 
-	if res.StatusCode != http.StatusOK {
-		return CrawlResult{}, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
-	}
+	// Read body first, then check status code, so body is available for error logging/parsing
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		return CrawlResult{}, err
+		return CrawlResult{
+			Url:          url,
+			StatusCode:   res.StatusCode,
+			ContentType:  res.Header.Get("Content-Type"),
+			ResponseTime: responseTime,
+			IsError:      true,
+		}, fmt.Errorf("failed to read response body for %s: %w", url.String(), err)
 	}
 
-	var inferredContentType string
-	contentType, ok := res.Header["Content-Type"]
-	if ok && len(contentType) > 0 {
-		inferredContentType = contentType[0]
-	} else {
+	// Content Type Inference
+	inferredContentType := res.Header.Get("Content-Type") // Get is safer, returns "" if not found
+	if inferredContentType == "" {
 		inferredContentType = http.DetectContentType(body)
 	}
 
+	// Return partial CrawlResult; Info will be populated later
 	return CrawlResult{
-		Url:         url,
-		ContentType: inferredContentType,
-		Body:        body,
-		Info:        &parser.Info{StatusCode: res.StatusCode},
+		Url:          url,
+		StatusCode:   res.StatusCode,
+		ContentType:  inferredContentType,
+		Body:         body,
+		ResponseTime: responseTime,
+		IsError:      false, // If we reached here, it's not an HTTP error
+		Info:         nil,   // Info will be populated by a separate parsing step
 	}, nil
 }

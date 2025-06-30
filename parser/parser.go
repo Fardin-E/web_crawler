@@ -8,7 +8,6 @@ type Token struct {
 
 type Info struct {
 	Title       string   `json:"title"`
-	StatusCode  int      `json:"statusCode"`
 	Description string   `json:"description"`
 	Paragraphs  []string `json:"paragraphs"`
 	Links       []Token  `json:"links"`

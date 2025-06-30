@@ -74,26 +74,15 @@ func (c *Crawler) Start() {
 	for result := range mergedResults {
 		copyResult := result
 
-		// Get the status code from the original info struct fetched
-		originalStatusCode := 0
-		if copyResult.Info != nil {
-			originalStatusCode = copyResult.Info.StatusCode
-		}
 		// Parse once BEFORE passing to processors
 		for _, p := range c.contentParsers {
 			if p.IsSupportedExtension(copyResult.ContentType) {
 				parsedInfo, err := p.Parse(string(copyResult.Body))
 				if err != nil {
 					log.Warnf("Failed to parse: %v", err)
-					if copyResult.Info == nil {
-						copyResult.Info = &parser.Info{StatusCode: originalStatusCode}
-					} else {
-						copyResult.Info.StatusCode = originalStatusCode
-					}
 				} else {
 					// 3. Assign the new parsed Info struct
 					copyResult.Info = &parsedInfo
-					copyResult.Info.StatusCode = originalStatusCode
 				}
 				break // Use only the first matching parser
 			}
