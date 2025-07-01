@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/Fardin-E/web_crawler.git/parser"
+	"github.com/Fardin-E/web_crawler.git/backend/parser"
 	log "github.com/sirupsen/logrus"
 )
 

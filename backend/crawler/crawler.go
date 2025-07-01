@@ -3,9 +3,9 @@ package crawler
 import (
 	"net/url"
 
-	"github.com/Fardin-E/web_crawler.git/frontier"
-	"github.com/Fardin-E/web_crawler.git/parser"
-	"github.com/Fardin-E/web_crawler.git/storage"
+	"github.com/Fardin-E/web_crawler.git/backend/frontier"
+	"github.com/Fardin-E/web_crawler.git/backend/parser"
+	"github.com/Fardin-E/web_crawler.git/backend/storage"
 
 	log "github.com/sirupsen/logrus"
 )

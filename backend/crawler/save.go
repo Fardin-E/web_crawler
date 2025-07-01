@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Fardin-E/web_crawler.git/storage"
+	"github.com/Fardin-E/web_crawler.git/backend/storage"
 )
 
 type SaveToFile struct {

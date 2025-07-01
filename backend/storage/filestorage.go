@@ -14,7 +14,7 @@ func NewFileStorage(root string) (*FileStorage, error) {
 	if _, err := os.Stat(root); err != nil {
 		err := os.MkdirAll(root, 0755)
 		if err != nil {
-			return nil, fmt.Errorf("Error creating root directory: %s", err)
+			return nil, fmt.Errorf("error creating root directory: %s", err)
 		}
 	}
 

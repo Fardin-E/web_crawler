@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/Fardin-E/web_crawler.git/crawler"
-	"github.com/Fardin-E/web_crawler.git/storage"
+	"github.com/Fardin-E/web_crawler.git/backend/crawler"
+	"github.com/Fardin-E/web_crawler.git/backend/storage"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,7 +16,7 @@ func main() {
 	myUrl, _ := url.Parse("https://www.bbc.com/news/articles/cql2990k4dno")
 	initialUrls = append(initialUrls, *myUrl)
 
-	contentStorage, err := storage.NewFileStorage("./data")
+	contentStorage, err := storage.NewFileStorage("../data")
 	if err != nil {
 		panic(err)
 	}

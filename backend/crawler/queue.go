@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"net/url"
 
-	"github.com/Fardin-E/web_crawler.git/frontier"
+	"github.com/Fardin-E/web_crawler.git/backend/frontier"
 
 	log "github.com/sirupsen/logrus"
 )
