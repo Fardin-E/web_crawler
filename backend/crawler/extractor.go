@@ -17,8 +17,8 @@ func (e *LinkExtractor) Process(result *CrawlResult) error {
 	}
 
 	foundUrls := make([]*url.URL, 0)
-	for _, parsedUrl := range result.Info.Links {
-		newUrl, err := url.Parse(parsedUrl.Value)
+	for _, parsedToken := range result.Info.Links {
+		newUrl, err := url.Parse(parsedToken.Value)
 		if err != nil {
 			log.Debugf("Error parsing url: %s", err)
 			continue
