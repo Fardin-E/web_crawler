@@ -1,9 +1,9 @@
 import './App.css'
-import Form from './components/UrlForm'
+import UrlForm from './components/UrlForm'
 
 function App() {
   return (
-    <Form />
+    <UrlForm />
   )
 }
 

@@ -1,62 +1,44 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-export interface StartCrawlRequest {
-    url: string;
-}
 
-function Form() {
-    const [url, setUrl] = useState<string>('');
+function UrlForm() {
 
-    const handleCrawlStart = async () => {
-        // No need for event.preventDefault() here
-        if (!url) {
-            alert('Please enter a URL.');
-            return;
-        }
+    const [url, setUrl] = useState('');
+    const [message] = useState('');
 
-        const requestBody: StartCrawlRequest = { url: url };
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         try {
             const response = await fetch('http://localhost:8080/api/crawler/start', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody),
+                body: JSON.stringify({ url: url }),
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status ${response.status}`);
-            }
-
             const data = await response.json();
-            console.log('Crawler started successfully: ', data);
-            
-        } catch (error) {
-            console.error('Failed to start crawler: ', error);
+            postMessage(data.message || 'Crawl started successfully!');
+        } catch(error) {
+            console.error('Failed to send URL: ', error);
+            postMessage('Failed to start crawl. Check the console for errors');
         }
     };
 
-    const handleUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setUrl(event.target.value);
-    };
-
     return (
-        <div className="form-container">
-            <label className="form-label">
-                Enter Url Here:
-                <input
-                    type="url"
-                    className="form-input"
-                    value={url}
-                    onChange={handleUrlChange}
-                />
-            </label>
-            <button type="button" className="form-button" onClick={handleCrawlStart}>
-                Send
-            </button>
-        </div>
+        <form onSubmit={handleSubmit}>
+            <input 
+            type="text" 
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="Enter URL to crawl"
+            required
+        />
+        <button type="submit">Start Crawl</button>
+        {message && <p>{message}</p>}
+        </form>
     );
-}
+};
 
-export default Form;
+export default UrlForm;

@@ -2,7 +2,6 @@ package crawler
 
 import (
 	"net/url"
-	"time"
 
 	"github.com/Fardin-E/web_crawler.git/backend/frontier"
 	"github.com/Fardin-E/web_crawler.git/backend/parser"
@@ -22,13 +21,15 @@ type Crawler struct {
 
 func NewCrawler(initialUrls []url.URL,
 	contentStorage storage.Storage,
-	config *Config) *Crawler {
+	config *Config,
+	contentParsers []parser.Parser) *Crawler {
+
 	deadLetter := make(chan *url.URL)
-	contentParser := []parser.Parser{&parser.HtmlParser{}}
+
 	return &Crawler{
 		frontier:       frontier.NewFrontier(initialUrls, config.ExcludePatterns),
 		storage:        contentStorage,
-		contentParsers: contentParser,
+		contentParsers: contentParsers,
 		deadLetter:     deadLetter,
 		config:         config,
 	}
@@ -113,35 +114,4 @@ func (c *Crawler) AddExcludePattern(pattern string) {
 
 func (c *Crawler) AddProcessor(processor Processor) {
 	c.processors = append(c.processors, processor)
-}
-
-// StartCrawling sets up and runs the crawler with a given starting URL.
-func StartCrawling(startURL string) {
-	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
-
-	myUrl, err := url.Parse(startURL)
-	if err != nil {
-		log.Printf("Error parsing URL: %v", err)
-		return
-	}
-
-	initialUrls := []url.URL{*myUrl}
-
-	contentStorage, err := storage.NewFileStorage("../data")
-	if err != nil {
-		log.Printf("Error creating storage: %v", err)
-		return
-	}
-
-	skipPatterns := []string{"/login*", "/search*", "/cart*", "/checkout*", "/account*"}
-
-	// Note: You might want to make these configs more dynamic
-	crawler := NewCrawler(initialUrls, contentStorage, &Config{
-		MaxRedirects:    5,
-		RevisitDelay:    time.Hour * 2,
-		WorkerCount:     10,
-		ExcludePatterns: skipPatterns,
-	})
-
-	go crawler.Start()
 }
