@@ -43,8 +43,6 @@ func StartCrawlHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// This is where you would get the crawler instance to start the crawl.
-	// We'll assume a NewCrawler function exists here for simplicity.
 	initialUrls := []url.URL{*parsedURL}
 	contentParsers := []parser.Parser{&parser.HtmlParser{}}
 	contentStorage, _ := storage.NewFileStorage("./data")

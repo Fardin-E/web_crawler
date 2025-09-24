@@ -20,8 +20,6 @@ func Run() {
 
 	// Add more handlers here as your application grows.
 
-	// Use the CORS middleware to allow requests from your frontend.
-	// This is essential for preventing cross-origin security errors.
 	handler := cors.Default().Handler(mux)
 
 	// Start the server and bind it to port 8080.
