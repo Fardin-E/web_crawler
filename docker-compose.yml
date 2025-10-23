@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Web Crawler CLI
+  crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: web-crawler:latest
+    container_name: web-crawler
+    # Override command to run a crawl
+    command: ["crawl", "--url", "https://example.com", "--workers", "5", "--output", "/data"]
+    volumes:
+      # Mount data directory to persist crawled data
+      - ./data:/home/crawler/data
+    environment:
+      # Optional environment variables
+      - LOG_LEVEL=info
+    # Resource limits (optional but recommended)
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    # Restart policy
+    restart: unless-stopped
+
+  # API Server (optional - for serve command)
+  crawler-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: web-crawler:latest
+    container_name: web-crawler-api
+    command: ["serve", "--port", "8080", "--host", "0.0.0.0"]
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/home/crawler/data
+    environment:
+      - LOG_LEVEL=debug
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    restart: unless-stopped
+    # Uncomment to run API server
+    # profiles:
+    #   - api
+
+# Optional: Add persistent volume
+volumes:
+  crawler-data:
+    driver: local

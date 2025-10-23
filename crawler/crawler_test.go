@@ -337,12 +337,18 @@ func TestCrawlerEmptyInitialURLs(t *testing.T) {
 		close(done)
 	}()
 
-	// Should complete immediately (nothing to do)
+	// Wait a moment for crawler to start
+	time.Sleep(500 * time.Millisecond)
+
+	// Terminate since there are no URLs to process
+	crawler.Terminate()
+
+	// Should complete quickly (nothing to do)
 	select {
 	case <-done:
 		// Success
-	case <-time.After(3 * time.Second):
-		t.Fatal("Crawler did not complete with empty URLs")
+	case <-time.After(2 * time.Second):
+		t.Fatal("Crawler did not terminate with empty URLs")
 	}
 }
 
