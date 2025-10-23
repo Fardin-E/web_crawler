@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
-	"path/filepath"
 	"testing"
 	"time"
 
@@ -388,34 +387,4 @@ func BenchmarkCrawlerWorkerPool(b *testing.B) {
 		crawler.Terminate()
 		<-done
 	}
-}
-
-// Helper function to check if a file exists
-func fileExists(path string) bool {
-	_, err := os.Stat(path)
-	return err == nil
-}
-
-// Helper function to count files in directory
-func countFilesInDir(dir string) (int, error) {
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return 0, err
-	}
-
-	count := 0
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			count++
-		} else {
-			// Recursively count files in subdirectories
-			subPath := filepath.Join(dir, entry.Name())
-			subCount, err := countFilesInDir(subPath)
-			if err != nil {
-				return count, err
-			}
-			count += subCount
-		}
-	}
-	return count, nil
 }
