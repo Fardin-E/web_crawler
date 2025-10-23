@@ -1,0 +1,215 @@
+{
+  "Title": "BBC Newsletters",
+  "Description": "BBC Newsletters sign-up page",
+  "Paragraphs": [
+    "Accessibility links",
+    "Newsletters from the BBC",
+    "Explore the BBC"
+  ],
+  "Links": [
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk"
+    },
+    {
+      "Name": "link",
+      "Value": "##__next"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/accessibility/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://account.bbc.com/account"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/notifications"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/news"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/sport"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/business"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/innovation"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/culture"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/travel"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/future-planet"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/video"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/live"
+    },
+    {
+      "Name": "link",
+      "Value": "#orbit-more-drawer"
+    },
+    {
+      "Name": "link",
+      "Value": "https://search.bbc.co.uk/search?scope=all\u0026destination=BBCS_BBC"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/news"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/sport"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/business"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/innovation"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/culture"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/travel"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/future-planet"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/video"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/live"
+    },
+    {
+      "Name": "link",
+      "Value": "#"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/news"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/sport"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/business"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/innovation"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/culture"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/travel"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/future-planet"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/video"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/live"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/usingthebbc/terms/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/aboutthebbc"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/usingthebbc/privacy/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/usingthebbc/privacy/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/usingthebbc/cookies/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/usingthebbc/cookies/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/accessibility/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/guidance"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/contact"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/contact/complaints/"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/bbcnewsletter"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.com/advertisingcontact"
+    },
+    {
+      "Name": "link",
+      "Value": "https://www.bbc.co.uk/editorialguidelines/guidance/feeds-and-links"
+    }
+  ]
+}
