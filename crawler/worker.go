@@ -45,9 +45,20 @@ func NewWorker(input chan *url.URL, result chan CrawlResult, done chan struct{},
 }
 func (w *Worker) Start() {
 	w.logger.Debugf("Worker %d started", w.id)
+	defer func() {
+		w.logger.Debugf("Worker %d stopped", w.id)
+		close(w.result) // Close result channel when worker exits
+	}()
+
 	for {
 		select {
-		case url := <-w.input:
+		case url, ok := <-w.input:
+			// Check if channel is closed
+			if !ok {
+				w.logger.Debug("Input channel closed, worker exiting")
+				return
+			}
+
 			content, err := w.fetch(url)
 			if err != nil {
 				log.Errorf("Worker %d error fetching content: %s", w.id, err)
@@ -56,6 +67,7 @@ func (w *Worker) Start() {
 			}
 			w.result <- content
 		case <-w.done:
+			w.logger.Debug("Received done signal, worker exiting")
 			return
 		}
 	}
