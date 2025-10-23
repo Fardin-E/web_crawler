@@ -134,7 +134,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: ./Dockerfile.working
+        file: ./Dockerfile
         push: false
         tags: ${{ env.DOCKER_IMAGE }}:latest
         cache-from: type=gha
@@ -192,7 +192,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: ./Dockerfile.working
+        file: ./Dockerfile
         # push: true  # Uncomment when registry is configured
         push: false  # Set to false for now
         tags: ${{ steps.meta.outputs.tags }}
