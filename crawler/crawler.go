@@ -22,7 +22,7 @@ type Crawler struct {
 func NewCrawler(initialUrls []url.URL,
 	contentStorage storage.Storage,
 	config *Config) *Crawler {
-	deadLetter := make(chan *url.URL)
+	deadLetter := make(chan *url.URL, 100) // Buffered channel to prevent blocking
 	contentParser := []parser.Parser{&parser.HtmlParser{}}
 	return &Crawler{
 		frontier:       frontier.NewFrontier(initialUrls, config.ExcludePatterns),
