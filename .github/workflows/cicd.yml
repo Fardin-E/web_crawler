@@ -29,6 +29,12 @@ jobs:
       run: |
         go test -v ./crawler
         go test -cover ./crawler
+
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v6
+      with:
+        version: latest
+        args: --timeout=5m
     
     # Step 4: Build binary
     - name: Build
