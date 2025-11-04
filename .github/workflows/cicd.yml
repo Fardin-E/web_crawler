@@ -1,6 +1,5 @@
 name: CI - Simple
 
-# Trigger on push to main/master or pull requests
 on:
   push:
     branches: [ main, master ]
@@ -8,42 +7,50 @@ on:
     branches: [ main, master ]
 
 jobs:
-  # Test and build
-  test-and-build:
-    name: Test and Build
+  # Separate lint job
+  lint:
+    name: Lint Code
     runs-on: ubuntu-latest
     
     steps:
-    # Step 1: Checkout code
     - name: Checkout code
       uses: actions/checkout@v4
     
-    # Step 2: Set up Go
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
         go-version: '1.24'
     
-    # Step 3: Run tests
-    - name: Run tests
-      run: |
-        go test -v ./crawler
-        go test -cover ./crawler
-
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v6
       with:
         version: latest
         args: --timeout=5m
+
+  # Test and build job
+  test-and-build:
+    name: Test and Build
+    runs-on: ubuntu-latest
     
-    # Step 4: Build binary
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.24'
+    
+    - name: Run tests
+      run: |
+        go test -v ./crawler
+        go test -cover ./crawler
+    
     - name: Build
       run: go build -v .
     
-    # Step 5: Build Docker image
     - name: Build Docker image
       run: docker build -t web-crawler:latest .
     
-    # Step 6: Test Docker image
     - name: Test Docker image
       run: docker run --rm web-crawler:latest --help
